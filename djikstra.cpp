@@ -1,56 +1,90 @@
-#include <bits/stdc++.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <iostream>
 
-#define ar array
-#define ll long long
-#define inf 999
+#define inf 9999
 
 using namespace std;
 
 int n;
-int t[100][100];
+int table[100][100];
 
-int djikstra(int s, int e){
+int djikstra (int start, int end) {
     int dist[n];
     bool visited[n];
     int i, j, v;
 
-    //install from dist[x]=infinite
-        for (int i=1; i<=n; i++) {
-            dist[i] = inf;
-        }
-    //install from visited[x]=false
-        for (int i=1; i<=n; i++) {
-            visited[i] = false;
-        }
+    for (int i=1;i<=n;i++){
+    dist[i]=inf;
+    }
 
-    dist[s]=0;
-    while(true) {
-        int u = -1;
-        int minDist = inf;
-        for (int i=1; i<=n; i++) {
-            if ((visited[i] == false)&& (dist[i]<minDist)) {
-                u = i;
-                minDist = dist[i];
+    for (int i=1;i<=n;i++){
+    visited[i]=false;
+    }
+
+    dist[start]=0;
+    while (true) 
+    {
+        int u=-1;
+        int minDist=inf;
+        //
+        for (int i=1;i<=n;i++){
+            if((visited[i]==false)&&(dist[i]<minDist)){
+                u=i;
+                minDist=dist[i];
+            }
+        }
+        //
+        if ((u==-1)||(dist[u]==inf)){
+            break;
+        }
+        visited[u]=true;
+        //
+        for (int v=1;v<=n;v++){
+            if (table [u][v]!=0){
+                if (dist[v]>dist[u]+table[u][v]){
+                    dist[v]=dist[u]+table[u][v];
+                }
             }
         }
     }
-    //end break
-    if ((u==-1)||(dist[u]==inf)){
-        break;
+    return dist[end];
+}
+
+int main() {
+    int start, end;
+    int i, j;
+    cout << "Enter Node" << endl;
+    cin >> n;
+    cout << "Enter node but in matrix" << endl;
+    //
+    for (int i=1;i<=n;i++){
+        for (int j=1;j<=n;j++){
+            cin >> table[i][j];
+        }
     }
 
-}
+    int ans=0, x;
+    while(ans==0) {
+        cout << "Enter starting Node" << endl;
+        cin >> start;
+        cout << "Enter last Node" << endl;
+        cin >> end;
+        //entering djikstra
+        cout << "Minimal distance from node is \n" << djikstra(start,end) << endl;
 
-void solve() {
-    
-}
-
-int main () {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-
-    int t;
-    cin >> t;
-    while (--t)
-        solve();    
+        repeat:
+        cout << "Do you want to start again ?(y/n)" << endl;
+        cin >> x;
+        if (x=='y'||x=='Y'){
+            ans=0;
+        }else if(x=='n'||x=='N'){
+            cout << "See ya later" << endl;
+            ans=1;
+        }else{
+            cout << "Input is not expected" << endl;
+            goto repeat;
+        }
+    }
+    return 0;
 }
